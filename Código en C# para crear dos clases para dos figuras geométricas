@@ -1,0 +1,141 @@
+using System;
+
+/// <summary>
+/// Clase que representa un círculo geométrico.
+/// Encapsula el radio como dato primitivo double.
+/// Proporciona métodos para calcular área y perímetro.
+/// </summary>
+public class Circulo
+{
+    // Radio del círculo, encapsulado como campo privado
+    private double radio;
+
+    /// <summary>
+    /// Constructor que inicializa el radio del círculo.
+    /// Requiere un valor double positivo para el radio.
+    /// </summary>
+    /// <param name="radio">Radio del círculo en unidades arbitrarias</param>
+    public Circulo(double radio)
+    {
+        if (radio < 0)
+            throw new ArgumentException("El radio no puede ser negativo");
+        this.radio = radio;
+    }
+
+    /// <summary>
+    /// CalcularArea es un método que devuelve un valor double.
+    /// Se utiliza para calcular el área del círculo usando la fórmula π * r².
+    /// Utiliza Math.PI para mayor precisión.
+    /// </summary>
+    /// <returns>Área del círculo en unidades cuadradas</returns>
+    public double CalcularArea()
+    {
+        return Math.PI * radio * radio;
+    }
+
+    /// <summary>
+    /// CalcularPerimetro es un método que devuelve un valor double.
+    /// Se utiliza para calcular el perímetro (circunferencia) del círculo usando 2 * π * r.
+    /// </summary>
+    /// <returns>Perímetro del círculo en unidades lineales</returns>
+    public double CalcularPerimetro()
+    {
+        return 2 * Math.PI * radio;
+    }
+}
+
+/// <summary>
+/// Clase que representa un rectángulo geométrico.
+/// Encapsula base y altura como datos primitivos double.
+/// Proporciona métodos para calcular área y perímetro.
+/// </summary>
+public class Rectangulo
+{
+    // Base y altura del rectángulo, encapsulados como campos privados
+    private double baseRect;
+    private double altura;
+
+    /// <summary>
+    /// Constructor que inicializa la base y altura del rectángulo.
+    /// Requiere valores double positivos para base y altura.
+    /// </summary>
+    /// <param name="baseRect">Base del rectángulo en unidades arbitrarias</param>
+    /// <param name="altura">Altura del rectángulo en unidades arbitrarias</param>
+    public Rectangulo(double baseRect, double altura)
+    {
+        if (baseRect < 0 || altura < 0)
+            throw new ArgumentException("La base y altura no pueden ser negativos");
+        this.baseRect = baseRect;
+        this.altura = altura;
+    }
+
+    /// <summary>
+    /// CalcularArea es un método que devuelve un valor double.
+    /// Se utiliza para calcular el área del rectángulo usando base * altura.
+    /// </summary>
+    /// <returns>Área del rectángulo en unidades cuadradas</returns>
+    public double CalcularArea()
+    {
+        return baseRect * altura;
+    }
+
+    /// <summary>
+    /// CalcularPerimetro es un método que devuelve un valor double.
+    /// Se utiliza para calcular el perímetro del rectángulo usando 2 * (base + altura).
+    /// </summary>
+    /// <returns>Perímetro del rectángulo en unidades lineales</returns>
+    public double CalcularPerimetro()
+    {
+        return 2 * (baseRect + altura);
+    }
+}
+
+/// <summary>
+/// Clase principal que demuestra el uso de las clases geométricas.
+/// Crea instancias de Círculo y Rectángulo y muestra sus cálculos.
+/// </summary>
+class Program
+{
+    static void Main()
+    {
+        // Crear círculo con radio 5 unidades
+        Circulo circulo = new Circulo(5.0);
+        Console.WriteLine("=== CÍRCULO ===");
+        Console.WriteLine($"Radio: {circulo.radio} unidades");
+        Console.WriteLine($"Área: {circulo.CalcularArea():F2} unidades²");
+        Console.WriteLine($"Perímetro: {circulo.CalcularPerimetro():F2} unidades");
+        Console.WriteLine();
+
+        // Crear rectángulo con base 4 y altura 6 unidades
+        Rectangulo rectangulo = new Rectangulo(4.0, 6.0);
+        Console.WriteLine("=== RECTÁNGULO ===");
+        Console.WriteLine($"Base: {rectangulo.baseRect} unidades, Altura: {rectangulo.altura} unidades");
+        Console.WriteLine($"Área: {rectangulo.CalcularArea():F2} unidades²");
+        Console.WriteLine($"Perímetro: {rectangulo.CalcularPerimetro():F2} unidades");
+        Console.WriteLine();
+
+        // Ejemplo adicional con diferentes valores
+        Console.WriteLine("=== EJEMPLO ADICIONAL ===");
+        Circulo circuloGrande = new Circulo(10.0);
+        Rectangulo rectanguloCuadrado = new Rectangulo(5.0, 5.0);
+        
+        Console.WriteLine($"Círculo grande (r=10): Área = {circuloGrande.CalcularArea():F2}");
+        Console.WriteLine($"Cuadrado (5x5): Perímetro = {rectanguloCuadrado.CalcularPerimetro():F2}");
+    }
+}
+
+
+
+=== CÍRCULO ===
+Radio: 5 unidades
+Área: 78.54 unidades²
+Perímetro: 31.42 unidades
+
+=== RECTÁNGULO ===
+Base: 4 unidades, Altura: 6 unidades
+Área: 24.00 unidades²
+Perímetro: 20.00 unidades
+
+=== EJEMPLO ADICIONAL ===
+Círculo grande (r=10): Área = 314.16
+Cuadrado (5x5): Perímetro = 20.00
