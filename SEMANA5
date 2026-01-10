@@ -1,0 +1,79 @@
+# ========================================
+# TODOS LOS 5 EJERCICIOS EN UNA SOLA EJECUCION
+# ========================================
+
+print("=== EJERCICIO 3 ===")
+print()
+asignaturas = ["Matemáticas", "Física", "Química", "Historia", "Lengua"]
+print("Asignaturas del curso:", asignaturas)
+print()
+
+print("=== EJERCICIO 6 ===")
+print()
+asignaturas = ["Matemáticas", "Física", "Química", "Historia", "Lengua"]
+aprobadas = []
+print("Introduce notas para cada asignatura (0-10):")
+for asignatura in asignaturas[:]:
+    while True:
+        try:
+            nota = float(input(f"Nota en {asignatura}: "))
+            if 0 <= nota <= 10:
+                break
+            else:
+                print("Nota debe estar entre 0 y 10")
+        except ValueError:
+            print("Introduce un número válido")
+    
+    if nota >= 5:
+        aprobadas.append(asignatura)
+
+for aprobada in aprobadas:
+    asignaturas.remove(aprobada)
+print("Asignaturas suspendidas:", asignaturas)
+print()
+
+print("=== EJERCICIO 8 ===")
+print()
+palabra = input("Introduce una palabra para verificar palíndromo: ").lower().replace(" ", "")
+if palabra == palabra[::-1]:
+    print(f"'{palabra}' ES PALÍNDROMO")
+else:
+    print(f"'{palabra}' NO ES PALÍNDROMO")
+print()
+
+print("=== EJERCICIO 9 ===")
+print()
+palabra = input("Introduce una palabra para contar vocales: ").lower()
+vocales = {'a': 0, 'e': 0, 'i': 0, 'o': 0, 'u': 0}
+
+for letra in palabra:
+    if letra in vocales:
+        vocales[letra] += 1
+
+print("Conteo de vocales:")
+for vocal, cuenta in vocales.items():
+    print(f"  {vocal}: {cuenta}")
+print()
+
+print("=== EJERCICIO 13 ===")
+print()
+while True:
+    try:
+        numeros_str = input("Introduce números separados por comas (ej: 1,2,3,4,5): ")
+        numeros = tuple(float(x.strip()) for x in numeros_str.split(","))
+        if len(numeros) > 0:
+            break
+        else:
+            print("Debe introducir al menos un número")
+    except ValueError:
+        print("Error: Introduce números válidos separados por comas")
+
+media = sum(numeros) / len(numeros)
+desviacion = (sum((x - media)**2 for x in numeros) / len(numeros))**0.5
+
+print(f"Números introducidos: {numeros}")
+print(f"Media: {media:.2f}")
+print(f"Desviación típica: {desviacion:.2f}")
+print()
+
+print("=== TODOS LOS EJERCICIOS COMPLETADOS ===")
