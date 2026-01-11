@@ -1,6 +1,5 @@
-# ========================================
-# TODOS LOS 5 EJERCICIOS EN UNA SOLA EJECUCION
-# ========================================
+# Código completo en una sola ejecución
+print("=== TODOS LOS EJERCICIOS ===")
 
 print("=== EJERCICIO 3 ===")
 print()
