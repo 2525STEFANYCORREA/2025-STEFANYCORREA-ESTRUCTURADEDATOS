@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    /// <summary>
+    /// Verifica si los paréntesis, llaves y corchetes están balanceados en una expresión.
+    /// Usa una pila para emparejar símbolos de apertura con cierre.
+    /// </summary>
+    static bool ParentesisBalanceados(string expresion)
+    {
+        Stack<char> pila = new Stack<char>(); // Pila para símbolos de apertura
+        Dictionary<char, char> pares = new Dictionary<char, char>
+        {
+            { ')', '(' },
+            { '}', '{' },
+            { ']', '[' }
+        };
+
+        foreach (char c in expresion)
+        {
+            if (c == '(' || c == '{' || c == '[')
+            {
+                pila.Push(c); // Empuja apertura
+            }
+            else if (pares.ContainsKey(c))
+            {
+                if (pila.Count == 0 || pila.Pop() != pares[c])
+                {
+                    return false; // No coincide o pila vacía
+                }
+            }
+            // Ignora otros caracteres (números, operadores)
+        }
+        return pila.Count == 0; // Debe estar vacía si balanceado
+    }
+
+    /// <summary>
+    /// Resuelve Torres de Hanoi usando recursión (implícitamente stacks de llamadas).
+    /// Muestra movimientos paso a paso para n discos de origen a destino usando auxiliar.
+    /// </summary>
+    static void TorresHanoi(int n, char origen, char destino, char auxiliar)
+    {
+        if (n == 1)
+        {
+            Console.WriteLine($"Mover disco 1 de torre {origen} a torre {destino}");
+            return;
+        }
+        // Mueve n-1 a auxiliar
+        TorresHanoi(n - 1, origen, auxiliar, destino);
+        // Mueve el mayor a destino
+        Console.WriteLine($"Mover disco {n} de torre {origen} a torre {destino}");
+        // Mueve n-1 de auxiliar a destino
+        TorresHanoi(n - 1, auxiliar, destino, origen);
+    }
+
+    static void Main()
+    {
+        // Ejemplo paréntesis
+        string expr = "{7 + (8 * 5) - [(9 - 7) + (4 + 1)]}";
+        Console.WriteLine("Verificación de paréntesis:");
+        Console.WriteLine(ParentesisBalanceados(expr) ? "Fórmula balanceada." : "Fórmula desbalanceada.");
+
+        // Ejemplo Torres de Hanoi (3 discos: A origen, C destino, B auxiliar)
+        Console.WriteLine("\nTorres de Hanoi (3 discos):");
+        TorresHanoi(3, 'A', 'C', 'B');
+    }
+}
