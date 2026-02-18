@@ -1,0 +1,104 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Ciudadano 
+{
+    public string Id { get; set; }
+    public string Nombre { get; set; }
+    public string Vacuna { get; set; } // ""=no vacunado, "Pfizer", "AstraZeneca", "Ambas"
+
+    public override string ToString() => $"{Id}: {Nombre} - {Vacuna}";
+}
+
+class Program
+{
+    static void Main()
+    {
+        // Conjunto total: 500 ciudadanos
+        var todosCiudadanos = GenerarCiudadanos(500, "Ciudadano");
+        
+        // Conjunto Pfizer: 75 ciudadanos vacunados solo Pfizer
+        var pfizerSolo = GenerarCiudadanos(75, "Pfizer_");
+        
+        // Conjunto AstraZeneca: 75 ciudadanos vacunados solo AstraZeneca  
+        var astraZenecaSolo = GenerarCiudadanos(75, "Astra_");
+        
+        // Conjunto AMBAS: 25 ciudadanos con ambas dosis (para demostración)
+        var ambasDosis = GenerarCiudadanos(25, "Ambas_");
+        
+        // OPERACIONES DE TEORÍA DE CONJUNTOS usando HashSet
+        var todosIds = new HashSet<string>(todosCiudadanos.Select(c => c.Id));
+        var vacunadosPfizerIds = new HashSet<string>(pfizerSolo.Select(c => c.Id));
+        var vacunadosAstraIds = new HashSet<string>(astraZenecaSolo.Select(c => c.Id));
+        var ambasIds = new HashSet<string>(ambasDosis.Select(c => c.Id));
+        
+        // 1. Ciudadanos NO vacunados: Total - (Pfizer ∪ AstraZeneca ∪ Ambas)
+        var vacunadosIds = new HashSet<string>();
+        vacunadosIds.UnionWith(vacunadosPfizerIds);
+        vacunadosIds.UnionWith(vacunadosAstraIds); 
+        vacunadosIds.UnionWith(ambasIds);
+        
+        var noVacunadosIds = new HashSet<string>(todosIds);
+        noVacunadosIds.ExceptWith(vacunadosIds);
+        var noVacunados = FiltrarCiudadanos(todosCiudadanos, noVacunadosIds);
+        
+        // 2. Ciudadanos con AMBAS dosis
+        var ambas = FiltrarCiudadanos(todosCiudadanos, ambasIds);
+        
+        // 3. SOLO Pfizer: Pfizer - Ambas
+        var soloPfizerIds = new HashSet<string>(vacunadosPfizerIds);
+        soloPfizerIds.ExceptWith(ambasIds);
+        var soloPfizer = FiltrarCiudadanos(todosCiudadanos, soloPfizerIds);
+        
+        // 4. SOLO AstraZeneca: AstraZeneca - Ambas  
+        var soloAstraIds = new HashSet<string>(vacunadosAstraIds);
+        soloAstraIds.ExceptWith(ambasIds);
+        var soloAstra = FiltrarCiudadanos(todosCiudadanos, soloAstraIds);
+
+        // MOSTRAR RESULTADOS
+        Console.WriteLine("=== CAMPAÑA VACUNACIÓN COVID-19 ===");
+        Console.WriteLine($"Total ciudadanos: {todosIds.Count}");
+        Console.WriteLine();
+        
+        Console.WriteLine("1. NO VACUNADOS ({0}):", noVacunados.Count);
+        MostrarLista(noVacunados.Take(5).ToList()); // Primeros 5
+        
+        Console.WriteLine("\n2. AMBAS DOSIS ({0}):", ambas.Count);
+        MostrarLista(ambas);
+        
+        Console.WriteLine("\n3. SOLO PFIZER ({0}):", soloPfizer.Count);
+        MostrarLista(soloPfizer);
+        
+        Console.WriteLine("\n4. SOLO ASTRAZENECA ({0}):", soloAstra.Count);
+        MostrarLista(soloAstra);
+    }
+    
+    static List<Ciudadano> GenerarCiudadanos(int cantidad, string prefijo)
+    {
+        var ciudadanos = new List<Ciudadano>();
+        for (int i = 1; i <= cantidad; i++)
+        {
+            ciudadanos.Add(new Ciudadano 
+            { 
+                Id = prefijo + i.ToString("000"), 
+                Nombre = $"Ciudadano {prefijo}{i}",
+                Vacuna = prefijo.Contains("Pfizer") ? "Pfizer" : 
+                        prefijo.Contains("Astra") ? "AstraZeneca" : "Ambas"
+            });
+        }
+        return ciudadanos;
+    }
+    
+    static List<Ciudadano> FiltrarCiudadanos(List<Ciudadano> todos, HashSet<string> ids)
+    {
+        return todos.Where(c => ids.Contains(c.Id)).ToList();
+    }
+    
+    static void MostrarLista(List<Ciudadano> lista)
+    {
+        foreach (var c in lista)
+            Console.WriteLine($"  {c}");
+        Console.WriteLine();
+    }
+}
