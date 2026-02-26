@@ -1,0 +1,142 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+class Program
+{
+    private static Dictionary<string, string> diccionarioInglesEspanol = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+    static void Main(string[] args)
+    {
+        InicializarDiccionario();
+        MostrarMenu();
+    }
+
+    static void InicializarDiccionario()
+    {
+        diccionarioInglesEspanol.Add("Time", "tiempo");
+        diccionarioInglesEspanol.Add("Person", "persona");
+        diccionarioInglesEspanol.Add("Year", "año");
+        diccionarioInglesEspanol.Add("Way", "camino");
+        diccionarioInglesEspanol.Add("Day", "día");
+        diccionarioInglesEspanol.Add("Thing", "cosa");
+        diccionarioInglesEspanol.Add("Man", "hombre");
+        diccionarioInglesEspanol.Add("World", "mundo");
+        diccionarioInglesEspanol.Add("Life", "vida");
+        diccionarioInglesEspanol.Add("Hand", "mano");
+        diccionarioInglesEspanol.Add("Part", "parte");
+        diccionarioInglesEspanol.Add("Child", "niño");
+        diccionarioInglesEspanol.Add("Eye", "ojo");
+        diccionarioInglesEspanol.Add("Woman", "mujer");
+        diccionarioInglesEspanol.Add("Place", "lugar");
+        diccionarioInglesEspanol.Add("Work", "trabajo");
+        diccionarioInglesEspanol.Add("Week", "semana");
+        diccionarioInglesEspanol.Add("Case", "caso");
+        diccionarioInglesEspanol.Add("Point", "punto");
+        diccionarioInglesEspanol.Add("Government", "gobierno");
+        diccionarioInglesEspanol.Add("Company", "compañía");
+    }
+
+    static void MostrarMenu()
+    {
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("==================== MENÚ ====================");
+            Console.WriteLine("1. Traducir una frase");
+            Console.WriteLine("2. Agregar palabras al diccionario");
+            Console.WriteLine("0. Salir");
+            Console.Write("Seleccione una opción: ");
+            string opcion = Console.ReadLine();
+
+            switch (opcion)
+            {
+                case "1":
+                    TraducirFrase();
+                    break;
+                case "2":
+                    AgregarPalabra();
+                    break;
+                case "0":
+                    Console.WriteLine("¡Gracias por usar el traductor!");
+                    return;
+                default:
+                    Console.WriteLine("Opción inválida. Presione Enter para continuar.");
+                    Console.ReadLine();
+                    break;
+            }
+        }
+    }
+
+    static void TraducirFrase()
+    {
+        Console.Clear();
+        Console.WriteLine("Ingrese la frase a traducir (inglés a español):");
+        string frase = Console.ReadLine();
+
+        string[] palabras = frase.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        StringBuilder fraseTraducida = new StringBuilder();
+
+        foreach (string palabra in palabras)
+        {
+            string palabraLimpia = LimpiarPalabra(palabra);
+            if (diccionarioInglesEspanol.TryGetValue(palabraLimpia, out string traduccion))
+            {
+                fraseTraducida.Append(traduccion + " ");
+            }
+            else
+            {
+                fraseTraducida.Append(palabra + " ");
+            }
+        }
+
+        Console.WriteLine("\nFrase original: " + frase);
+        Console.WriteLine("Traducción: " + fraseTraducida.ToString().Trim());
+        Console.WriteLine("\nPresione Enter para continuar...");
+        Console.ReadLine();
+    }
+
+    static void AgregarPalabra()
+    {
+        Console.Clear();
+        Console.WriteLine("Agregar nueva palabra:");
+        Console.Write("Palabra en inglés: ");
+        string ingles = Console.ReadLine().Trim();
+        Console.Write("Traducción al español: ");
+        string espanol = Console.ReadLine().Trim();
+
+        if (!string.IsNullOrEmpty(ingles) && !string.IsNullOrEmpty(espanol))
+        {
+            if (diccionarioInglesEspanol.ContainsKey(ingles))
+            {
+                Console.WriteLine("¡La palabra ya existe en el diccionario!");
+            }
+            else
+            {
+                diccionarioInglesEspanol.Add(ingles, espanol);
+                Console.WriteLine("¡Palabra agregada exitosamente!");
+            }
+        }
+        else
+        {
+            Console.WriteLine("¡Entrada inválida!");
+        }
+
+        Console.WriteLine("\nPresione Enter para continuar...");
+        Console.ReadLine();
+    }
+
+    static string LimpiarPalabra(string palabra)
+    {
+        StringBuilder limpia = new StringBuilder();
+        foreach (char c in palabra)
+        {
+            if (char.IsLetter(c))
+            {
+                limpia.Append(char.ToLower(c));
+            }
+        }
+        return limpia.ToString();
+    }
+}
