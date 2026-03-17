@@ -1,0 +1,228 @@
+using System;
+
+namespace BSTApp
+{
+    // Clase Nodo
+    class Nodo
+    {
+        public int Valor;
+        public Nodo Izquierdo;
+        public Nodo Derecho;
+
+        public Nodo(int valor)
+        {
+            Valor = valor;
+            Izquierdo = null;
+            Derecho = null;
+        }
+    }
+
+    // Clase Árbol Binario de Búsqueda
+    class BST
+    {
+        public Nodo Raiz;
+
+        public BST()
+        {
+            Raiz = null;
+        }
+
+        // Insertar
+        public void Insertar(int valor)
+        {
+            Raiz = InsertarRec(Raiz, valor);
+        }
+
+        private Nodo InsertarRec(Nodo nodo, int valor)
+        {
+            if (nodo == null) return new Nodo(valor);
+
+            if (valor < nodo.Valor)
+                nodo.Izquierdo = InsertarRec(nodo.Izquierdo, valor);
+            else if (valor > nodo.Valor)
+                nodo.Derecho = InsertarRec(nodo.Derecho, valor);
+
+            return nodo;
+        }
+
+        // Buscar
+        public bool Buscar(int valor)
+        {
+            return BuscarRec(Raiz, valor);
+        }
+
+        private bool BuscarRec(Nodo nodo, int valor)
+        {
+            if (nodo == null) return false;
+            if (valor == nodo.Valor) return true;
+            return valor < nodo.Valor ? BuscarRec(nodo.Izquierdo, valor) : BuscarRec(nodo.Derecho, valor);
+        }
+
+        // Eliminar
+        public void Eliminar(int valor)
+        {
+            Raiz = EliminarRec(Raiz, valor);
+        }
+
+        private Nodo EliminarRec(Nodo nodo, int valor)
+        {
+            if (nodo == null) return null;
+
+            if (valor < nodo.Valor)
+                nodo.Izquierdo = EliminarRec(nodo.Izquierdo, valor);
+            else if (valor > nodo.Valor)
+                nodo.Derecho = EliminarRec(nodo.Derecho, valor);
+            else
+            {
+                if (nodo.Izquierdo == null) return nodo.Derecho;
+                if (nodo.Derecho == null) return nodo.Izquierdo;
+
+                nodo.Valor = MinValor(nodo.Derecho);
+                nodo.Derecho = EliminarRec(nodo.Derecho, nodo.Valor);
+            }
+            return nodo;
+        }
+
+        // Recorridos
+        public void Preorden() => PreordenRec(Raiz);
+        private void PreordenRec(Nodo nodo)
+        {
+            if (nodo != null)
+            {
+                Console.Write(nodo.Valor + " ");
+                PreordenRec(nodo.Izquierdo);
+                PreordenRec(nodo.Derecho);
+            }
+        }
+
+        public void Inorden() => InordenRec(Raiz);
+        private void InordenRec(Nodo nodo)
+        {
+            if (nodo != null)
+            {
+                InordenRec(nodo.Izquierdo);
+                Console.Write(nodo.Valor + " ");
+                InordenRec(nodo.Derecho);
+            }
+        }
+
+        public void Postorden() => PostordenRec(Raiz);
+        private void PostordenRec(Nodo nodo)
+        {
+            if (nodo != null)
+            {
+                PostordenRec(nodo.Izquierdo);
+                PostordenRec(nodo.Derecho);
+                Console.Write(nodo.Valor + " ");
+            }
+        }
+
+        // Valores mínimo y máximo
+        public int MinValor(Nodo nodo)
+        {
+            Nodo actual = nodo;
+            while (actual.Izquierdo != null)
+                actual = actual.Izquierdo;
+            return actual.Valor;
+        }
+
+        public int MaxValor()
+        {
+            Nodo actual = Raiz;
+            while (actual.Derecho != null)
+                actual = actual.Derecho;
+            return actual.Valor;
+        }
+
+        // Altura del árbol
+        public int Altura() => AlturaRec(Raiz);
+        private int AlturaRec(Nodo nodo)
+        {
+            if (nodo == null) return 0;
+            return Math.Max(AlturaRec(nodo.Izquierdo), AlturaRec(nodo.Derecho)) + 1;
+        }
+
+        // Limpiar árbol
+        public void Limpiar() => Raiz = null;
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            BST arbol = new BST();
+            int opcion, valor;
+
+            do
+            {
+                Console.WriteLine("\n--- Menú BST ---");
+                Console.WriteLine("1. Insertar valor");
+                Console.WriteLine("2. Buscar valor");
+                Console.WriteLine("3. Eliminar valor");
+                Console.WriteLine("4. Recorrido Preorden");
+                Console.WriteLine("5. Recorrido Inorden");
+                Console.WriteLine("6. Recorrido Postorden");
+                Console.WriteLine("7. Valor mínimo y máximo");
+                Console.WriteLine("8. Altura del árbol");
+                Console.WriteLine("9. Limpiar árbol");
+                Console.WriteLine("0. Salir");
+                Console.Write("Opción: ");
+                opcion = int.Parse(Console.ReadLine());
+
+                switch (opcion)
+                {
+                    case 1:
+                        Console.Write("Ingrese valor: ");
+                        valor = int.Parse(Console.ReadLine());
+                        arbol.Insertar(valor);
+                        break;
+                    case 2:
+                        Console.Write("Ingrese valor a buscar: ");
+                        valor = int.Parse(Console.ReadLine());
+                        Console.WriteLine(arbol.Buscar(valor) ? "Valor encontrado" : "Valor no encontrado");
+                        break;
+                    case 3:
+                        Console.Write("Ingrese valor a eliminar: ");
+                        valor = int.Parse(Console.ReadLine());
+                        arbol.Eliminar(valor);
+                        break;
+                    case 4:
+                        Console.Write("Preorden: ");
+                        arbol.Preorden();
+                        Console.WriteLine();
+                        break;
+                    case 5:
+                        Console.Write("Inorden: ");
+                        arbol.Inorden();
+                        Console.WriteLine();
+                        break;
+                    case 6:
+                        Console.Write("Postorden: ");
+                        arbol.Postorden();
+                        Console.WriteLine();
+                        break;
+                    case 7:
+                        if (arbol.Raiz != null)
+                            Console.WriteLine($"Mínimo: {arbol.MinValor(arbol.Raiz)}, Máximo: {arbol.MaxValor()}");
+                        else
+                            Console.WriteLine("El árbol está vacío");
+                        break;
+                    case 8:
+                        Console.WriteLine($"Altura del árbol: {arbol.Altura()}");
+                        break;
+                    case 9:
+                        arbol.Limpiar();
+                        Console.WriteLine("Árbol limpiado");
+                        break;
+                    case 0:
+                        Console.WriteLine("Saliendo...");
+                        break;
+                    default:
+                        Console.WriteLine("Opción inválida");
+                        break;
+                }
+
+            } while (opcion != 0);
+        }
+    }
+}
